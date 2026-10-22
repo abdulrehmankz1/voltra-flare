@@ -17,9 +17,13 @@ export const viewport: Viewport = {
   themeColor: "#050608",
 };
 
-// MOTION-DEV OWNS THIS STRING: the pre-paint root script (the js class and the fallback if the motion bundle never
-// boots, as on Petals). Left empty until the motion port fills it in; any future CSP must allow it by its hash.
-const rootScript = "";
+// The original script adds js to the root once it runs, and the CSS lays the page out for the script from then on
+// (html:not(.js) is the no-JavaScript layout: steps in a grid, the phones in flow, no menu button or billing toggle).
+// This adds it before first paint, before the motion bundle arrives, so the layout does not jump. If the bundle never
+// reports in ("flare:motion", sent by components/flare/motion/boot.ts) within 10 s, js is taken off again and the
+// page shows as without JavaScript (the original does the same when its script fails); a late boot adds it back.
+// Any future CSP must allow this script by its hash.
+const rootScript = `(function(){var r=document.documentElement,ok=false;r.classList.add('js');addEventListener('flare:motion',function(){ok=true;});setTimeout(function(){if(!ok)r.classList.remove('js');},10000);})();`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
