@@ -1,0 +1,93 @@
+/*
+ * Tailwind is loaded without Preflight: the Voltra stylesheet ships its own reset, and Preflight
+ * would change the original page's rendering. Theme tokens and utilities stay available.
+ *
+ * The original stylesheet sits in its own layer below components/utilities. Unlayered, its resets
+ * (button, a, h1–h3, ul, svg, :focus-visible) would beat every Tailwind utility regardless of
+ * specificity, and shadcn components would render unstyled.
+ */
+@layer theme, base, voltra, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "../styles/flare.css" layer(voltra);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Only scan the app source for utilities (not reference/ or the kit's docs) */
+@source "../";
+
+/* The palette is dark-only, so shadcn's dark: variants always apply */
+@custom-variant dark (&:where(html, html *));
+
+/* Voltra brand tokens as Tailwind utilities (bg-ink-950, text-volt-500, …) for new work */
+@theme inline {
+  --color-ink-950: #050608;
+  --color-ink-900: #0c0d12;
+  --color-ink-800: #15161d;
+  --color-ink-700: #24262e;
+  --color-fog: #9a9daa;
+  --color-paper: #f3f4f7;
+  --color-volt-100: #e3ebff;
+  --color-volt-300: #8eaeff;
+  --color-volt-500: #2f6bff;
+  --color-volt-700: #1c40da;
+  --color-volt-900: #0f238f;
+  --color-mist: #bcd0ff;
+  --color-blue: #4f7dff;
+  --color-field: #0f2bd9;
+  --color-signal: #2bd47d;
+  --color-signal-ink: #13a35e;
+  --color-alert: #f0444b;
+  --font-sans: Urbanist, "Avenir Next", "Segoe UI", Helvetica, Arial, sans-serif;
+  --ease-voltra: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-voltra-io: cubic-bezier(0.83, 0, 0.17, 1);
+  --ease-voltra-soft: cubic-bezier(0.33, 0, 0.2, 1);
+}
+
+/* shadcn/ui tokens, mapped onto the Voltra palette (dark) */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+:root {
+  --radius: 0.75rem;
+  --background: #050608;
+  --foreground: #ffffff;
+  --card: #0c0d12;
+  --card-foreground: #ffffff;
+  --popover: #0c0d12;
+  --popover-foreground: #ffffff;
+  --primary: #2f6bff;
+  --primary-foreground: #ffffff;
+  --secondary: #15161d;
+  --secondary-foreground: #ffffff;
+  --muted: #15161d;
+  --muted-foreground: #9a9daa;
+  --accent: #24262e;
+  --accent-foreground: #ffffff;
+  --destructive: #f0444b;
+  --border: rgb(255 255 255 / 0.12);
+  --input: rgb(255 255 255 / 0.16);
+  --ring: #4f7dff;
+}
